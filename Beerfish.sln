@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B933FD23-2DB8-41F1-8A14-3077D91BFAB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D94750E-15F0-466C-A3FF-DF7CC72A5A25}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Beerfish", "src\Beerfish\Beerfish.xproj", "{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Beerfish.WebTest", "test\Beerfish.WebTest\Beerfish.WebTest.xproj", "{DE09C392-BD1D-4180-BD55-59E7AF9D79EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DDD350E4-5782-410A-B7A2-A14CFF7CF647}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE09C392-BD1D-4180-BD55-59E7AF9D79EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE09C392-BD1D-4180-BD55-59E7AF9D79EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE09C392-BD1D-4180-BD55-59E7AF9D79EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE09C392-BD1D-4180-BD55-59E7AF9D79EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E9B9F7C-0D68-42F8-AA9E-76894A9EA07D} = {B933FD23-2DB8-41F1-8A14-3077D91BFAB0}
+		{DE09C392-BD1D-4180-BD55-59E7AF9D79EF} = {DDD350E4-5782-410A-B7A2-A14CFF7CF647}
+	EndGlobalSection
+EndGlobal

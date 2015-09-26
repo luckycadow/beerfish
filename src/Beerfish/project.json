@@ -1,0 +1,20 @@
+{
+    "version": "1.0.0-*",
+    "description": "Beerfish Class Library",
+    "authors": [ "Eric Cadow" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+
+    "dependencies": {
+        "Microsoft.Framework.OptionsModel": "1.0.0-beta4",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
+        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta4",
+        "JSMin.NET": "1.0.0",
+        "libsassnet.x64": "3.2.5.1"
+    },
+
+    "frameworks": {
+        "dnx451": { }
+    }
+}

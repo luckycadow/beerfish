@@ -1,0 +1,46 @@
+{
+    "webroot": "wwwroot",
+    "userSecretsId": "aspnet5-Beerfish.WebTest-4a75edb8-bb76-4f41-9d3c-7a551c941eed",
+    "version": "1.0.0-*",
+
+    "dependencies": {
+        "Microsoft.AspNet.Mvc": "6.0.0-beta4",
+        "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-beta4",
+        "Microsoft.AspNet.Diagnostics": "1.0.0-beta4",
+        "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-beta4",
+        "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-beta4",
+        "Microsoft.AspNet.Server.WebListener": "1.0.0-beta4",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
+        "Microsoft.AspNet.Tooling.Razor": "1.0.0-beta4",
+        "Microsoft.Framework.Logging": "1.0.0-beta4",
+        "Microsoft.Framework.Logging.Console": "1.0.0-beta4",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta4",
+        "Beerfish": "1.0.0-*",
+      "Microsoft.Framework.ConfigurationModel": "1.0.0-beta4",
+      "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-beta4"
+    },
+
+    "commands": {
+        "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5000"
+    },
+
+    "frameworks": {
+        "dnx451": { }
+    },
+
+    "exclude": [
+        "wwwroot",
+        "node_modules",
+        "bower_components"
+    ],
+    "publishExclude": [
+        "node_modules",
+        "bower_components",
+        "**.xproj",
+        "**.user",
+        "**.vspscc"
+    ],
+    "scripts": {
+        "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
+    }
+}

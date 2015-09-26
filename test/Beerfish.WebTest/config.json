@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "Beerfish.WebTest"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-Beerfish.WebTest-4a75edb8-bb76-4f41-9d3c-7a551c941eed;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}
