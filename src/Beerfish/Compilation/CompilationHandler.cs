@@ -24,10 +24,17 @@ namespace Beerfish.Compilation
                 return;
 
             Parallel.ForEach(_compilers, c => {
-                var assetContents = c.CompileAssets(directories);
-                foreach(var asset in assetContents)
+                try
                 {
-                    _registry.RegisterAsset(asset.Key, asset.Value, c.Type);
+                    var assetContents = c.CompileAssets(directories);
+                    foreach (var asset in assetContents)
+                    {
+                        _registry.RegisterAsset(asset.Key, asset.Value, c.Type);
+                    }
+                }
+                catch (IOException e)
+                {
+                    Console.Error.WriteLine(e.ToString());
                 }
             });
         }
@@ -40,26 +47,17 @@ namespace Beerfish.Compilation
                 var watcher = new FileSystemWatcher(dir.FullName);
                 watcher.IncludeSubdirectories = true;
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
-                watcher.Changed += OnChange;
+                watcher.Changed += new FileSystemEventHandler(OnChange);
+                watcher.EnableRaisingEvents = true;
             }
         }
 
         private void OnChange(object sender, FileSystemEventArgs e)
         {
-            if (_watchedDirectories == null) return;
-
-            // If the directory that changed is in our list of watched directories then 
-            // run the compilers against it.  If it is not (and therefore a child) run the 
-            // compilers against all of our watched directores because we don't know if 
-            // compilation is safe to do directly on a child directory.
-            if (_watchedDirectories.Any(d => d.FullName == e.FullPath))
-            {
-                ExecuteCompilers(new List<DirectoryInfo>() { new DirectoryInfo(e.FullPath) });
-            }
-            else
-            {
-                ExecuteCompilers(_watchedDirectories);
-            }
+            var watcher = sender as FileSystemWatcher;
+            // Try to filter temp files out here
+            if (watcher == null || e.Name.EndsWith("TMP") || e.Name.StartsWith("~") || e.Name.EndsWith("~")) return;
+            ExecuteCompilers(new List<DirectoryInfo>() { new DirectoryInfo(watcher.Path) });
         }
         
     }

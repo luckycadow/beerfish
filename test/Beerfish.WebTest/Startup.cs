@@ -31,10 +31,10 @@ namespace Beerfish.WebTest
             services.AddOptions();
             services.AddAssetManagement(o => {
                 o.Assets = new List<string> { "stuff/sass", "stuff/js" };
-                o.Fingerprint = true;
+                o.Fingerprint = false;
                 o.ServePath = "/asset";
-                o.WatchFiles = false;
-                o.Minify = true;
+                o.WatchFiles = true;
+                o.Minify = false;
             });
             services.AddMvc();
         }
