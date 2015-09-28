@@ -55,14 +55,13 @@ namespace Beerfish
 
             var pathString = new PathString(asset.Path);
 
-            if (_assetLookup.ContainsKey(pathString))
+            var existingAsset = _assetLookup.Values.FirstOrDefault(a => a.SimpleName == asset.SimpleName);
+            if (!string.IsNullOrEmpty(existingAsset?.Path))
             {
-                _assetLookup[pathString] = asset;
+                _assetLookup.Remove(new PathString(existingAsset.Path));
             }
-            else
-            {
-                _assetLookup.Add(pathString, asset);
-            }
+            
+            _assetLookup.Add(pathString, asset);
         }
 
         public Asset GetAsset(PathString path)

@@ -31,7 +31,7 @@ namespace Beerfish.WebTest
             services.AddOptions();
             services.AddAssetManagement(o => {
                 o.Assets = new List<string> { "stuff/sass", "stuff/js" };
-                o.Fingerprint = false;
+                o.Fingerprint = true;
                 o.ServePath = "/asset";
                 o.WatchFiles = true;
                 o.Minify = false;
