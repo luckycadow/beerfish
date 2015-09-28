@@ -56,12 +56,20 @@ namespace Beerfish.Extensions
 
         public static IServiceCollection AddAssetManagement(this IServiceCollection services, Action<AssetOptions> setupAction)
         {
-            return services
+            services
                 .Configure(setupAction)
                 .AddSingleton(typeof(IAssetRegistry), typeof(AssetRegistry))
-                .AddTransient(typeof(IAssetCompiler), typeof(ScssCompiler))
                 .AddTransient(typeof(IAssetCompiler), typeof(SimpleJavascriptCompiler));
+
+            // Scss compilation will not work on mono because it's using the c++ library
+            #if __MonoCS__
+                services.AddTransient(typeof(IAssetCompiler), typeof(CssProxyCompiler));
+            #else
+                services.AddTransient(typeof(IAssetCompiler), typeof(ScssCompiler));
+            #endif
+
+            return services;
         }
-        
+
     }
 }
