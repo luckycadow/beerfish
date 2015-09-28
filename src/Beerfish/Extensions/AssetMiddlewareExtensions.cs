@@ -62,9 +62,8 @@ namespace Beerfish.Extensions
                 .AddTransient(typeof(IAssetCompiler), typeof(SimpleJavascriptCompiler));
 
             // Scss compilation will not work on mono because it's using the c++ library
-            #if !__MonoCS__
+            if (Type.GetType("Mono.Runtime") == null)
                 services.AddTransient(typeof(IAssetCompiler), typeof(ScssCompiler));
-            #endif
 
             return services;
         }
