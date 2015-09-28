@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2-beta4",
+    "version": "1.0.3-beta4",
     "description": "ASP.NET 5 asset management middleware",
     "authors": [ "Eric Cadow" ],
     "tags": [ "css", "javascript", "asset management", "sass" ],
