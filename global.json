@@ -1,8 +1,8 @@
 {
-    "projects": [ "src", "test" ],
-    "sdk": {
-        "version": "1.0.0-beta4",
-        "runtime": "clr",
-        "architecture": "x64"
-    }
+  "projects": [ "src", "test" ],
+  "sdk": {
+    "version": "1.0.0-beta4",
+    "runtime": "clr",
+    "architecture": "x86"
+  }
 }

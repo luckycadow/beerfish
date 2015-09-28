@@ -1,20 +1,20 @@
 {
-    "version": "1.0.3-beta4",
-    "description": "ASP.NET 5 asset management middleware",
-    "authors": [ "Eric Cadow" ],
-    "tags": [ "css", "javascript", "asset management", "sass" ],
-    "projectUrl": "https://github.com/luckycadow/beerfish",
-    "licenseUrl": "",
+  "version": "1.0.3-beta4",
+  "description": "ASP.NET 5 asset management middleware",
+  "authors": [ "Eric Cadow" ],
+  "tags": [ "css", "javascript", "asset management", "sass" ],
+  "projectUrl": "https://github.com/luckycadow/beerfish",
+  "licenseUrl": "",
 
-    "dependencies": {
-        "Microsoft.Framework.OptionsModel": "1.0.0-beta4",
-        "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
-        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta4",
-        "JSMin.NET": "1.0.0",
-        "libsassnet.x64": "3.2.5.1"
-    },
+  "dependencies": {
+    "Microsoft.Framework.OptionsModel": "1.0.0-beta4",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-beta4",
+    "JSMin.NET": "1.0.0",
+    "libsassnet": "3.2.5.1"
+  },
 
-    "frameworks": {
-        "dnx451": { }
-    }
+  "frameworks": {
+    "dnx451": { }
+  }
 }
