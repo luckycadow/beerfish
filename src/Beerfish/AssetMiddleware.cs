@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Framework.OptionsModel;
 using System.IO;
 using System.Text;
+using Microsoft.Framework.Runtime;
 
 namespace Beerfish
 {
@@ -13,13 +14,15 @@ namespace Beerfish
         private readonly RequestDelegate _next;
         private readonly AssetOptions _options;
         private readonly PathString _assetPath;
+        private readonly string _baseDirectory;
 
-        public AssetMiddleware(RequestDelegate next, IOptions<AssetOptions> options, IAssetRegistry registry)
+        public AssetMiddleware(RequestDelegate next, IOptions<AssetOptions> options, IAssetRegistry registry, IApplicationEnvironment env)
         {
             _next = next;
             _options = options.Options;
             _assetPath = new PathString(options.Options.ServePath);
             _registry = registry;
+            _baseDirectory = env.ApplicationBasePath;
         }
 
         public async Task Invoke(HttpContext context)
@@ -32,6 +35,16 @@ namespace Beerfish
                     context.Response.ContentType = asset.ContentType;
                     context.Response.ContentLength = Encoding.ASCII.GetByteCount(asset.Contents);
                     await context.Response.WriteAsync(asset.Contents);
+                    return;
+                }
+
+                var physicalPath = Path.Combine(_baseDirectory, context.Request.Path.ToString().TrimStart("/".ToCharArray()));
+                if (File.Exists(physicalPath))
+                {
+                    var contents = File.ReadAllText(physicalPath);
+                    context.Response.ContentType = physicalPath.EndsWith(".css") ? "text/css" : "application/javascript";
+                    context.Response.ContentLength = Encoding.ASCII.GetByteCount(contents);
+                    await context.Response.WriteAsync(contents);
                     return;
                 }
             }

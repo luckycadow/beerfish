@@ -6,10 +6,13 @@ namespace Beerfish.Extensions
     public static class AssetRazorExtensions
     {
         private static IAssetRegistry _assetRegistry;
+        private static string _servePath;
 
-        public static void SetAssetRegistry(IAssetRegistry registry)
+
+        public static void SetupExtensions(IAssetRegistry registry, string servePath)
         {
             _assetRegistry = registry;
+            _servePath = servePath.TrimEnd("/".ToCharArray());
         }
 
         /// <summary>
@@ -30,7 +33,17 @@ namespace Beerfish.Extensions
 
             if (asset == null)
             {
-                return new HtmlString(string.Empty);
+                // If we're asked to write a tag for an asset that doesn't exist, just use the name
+                // prefixed by the serve path so the request has the option to fall through to a
+                // file handler.
+                if (name.EndsWith(".css"))
+                {
+                    return new HtmlString($"<link rel=\"stylesheet\" href=\"{_servePath}/{name}\">");
+                }
+                else
+                {
+                    return new HtmlString($"<script src=\"{_servePath}/{name}\"></script>");
+                }
             }
             else if (asset.Type == AssetTypes.Js)
             {

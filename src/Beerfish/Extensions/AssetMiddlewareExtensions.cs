@@ -25,7 +25,7 @@ namespace Beerfish.Extensions
             var registry = app.ApplicationServices.GetRequiredService<IAssetRegistry>();
             var compilers = app.ApplicationServices.GetRequiredServices<IAssetCompiler>();
 
-            AssetRazorExtensions.SetAssetRegistry(registry);
+            AssetRazorExtensions.SetupExtensions(registry, options.ServePath);
             
             var directories = options.Assets
                 .Select(f => new DirectoryInfo(Path.Combine(env.ApplicationBasePath, f)));
@@ -62,9 +62,7 @@ namespace Beerfish.Extensions
                 .AddTransient(typeof(IAssetCompiler), typeof(SimpleJavascriptCompiler));
 
             // Scss compilation will not work on mono because it's using the c++ library
-            #if __MonoCS__
-                services.AddTransient(typeof(IAssetCompiler), typeof(CssProxyCompiler));
-            #else
+            #if !__MonoCS__
                 services.AddTransient(typeof(IAssetCompiler), typeof(ScssCompiler));
             #endif
 

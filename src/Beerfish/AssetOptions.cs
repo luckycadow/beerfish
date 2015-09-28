@@ -25,6 +25,9 @@ namespace Beerfish
         /// </summary>
         public bool WatchFiles { get; set; }
        
+        /// <summary>
+        /// Minify files when compiling
+        /// </summary>
         public bool Minify { get; set; }
     }
     
