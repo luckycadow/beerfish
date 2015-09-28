@@ -1,9 +1,9 @@
 {
-    "version": "1.0.0-*",
-    "description": "Beerfish Class Library",
+    "version": "1.0.1-beta4",
+    "description": "ASP.NET 5 asset management middleware",
     "authors": [ "Eric Cadow" ],
-    "tags": [ "" ],
-    "projectUrl": "",
+    "tags": [ "css", "javascript", "asset management", "sass" ],
+    "projectUrl": "https://github.com/luckycadow/beerfish",
     "licenseUrl": "",
 
     "dependencies": {
