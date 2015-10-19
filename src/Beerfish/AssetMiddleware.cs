@@ -5,6 +5,7 @@ using Microsoft.Framework.OptionsModel;
 using System.IO;
 using System.Text;
 using Microsoft.Framework.Runtime;
+using System;
 
 namespace Beerfish
 {
@@ -32,6 +33,7 @@ namespace Beerfish
                 Asset asset = _registry.GetAsset(context.Request.Path);
                 if (asset != null)
                 {
+                    SetCacheHeaders(context.Response);
                     context.Response.ContentType = asset.ContentType;
                     context.Response.ContentLength = Encoding.ASCII.GetByteCount(asset.Contents);
                     await context.Response.WriteAsync(asset.Contents);
@@ -42,6 +44,7 @@ namespace Beerfish
                 if (File.Exists(physicalPath))
                 {
                     var contents = File.ReadAllText(physicalPath);
+                    SetCacheHeaders(context.Response);
                     context.Response.ContentType = physicalPath.EndsWith(".css") ? "text/css" : "application/javascript";
                     context.Response.ContentLength = Encoding.ASCII.GetByteCount(contents);
                     await context.Response.WriteAsync(contents);
@@ -52,5 +55,15 @@ namespace Beerfish
             await _next(context);
         }
         
+        private void SetCacheHeaders(HttpResponse response)
+        {
+            if (_options.CacheLength != null)
+            {
+                var expires = DateTime.Now.AddSeconds(_options.CacheLength.TotalSeconds);
+                response.Headers.SetCommaSeparatedValues("Cache-Control", "public", $"max-age={_options.CacheLength.TotalSeconds}");
+                response.Headers.Set("Expires", expires.ToUniversalTime().ToString("R"));
+            }
+        }
+
     }
 }

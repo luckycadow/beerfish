@@ -35,6 +35,7 @@ namespace Beerfish.WebTest
                 o.ServePath = "/asset";
                 o.WatchFiles = true;
                 o.Minify = false;
+                o.CacheLength = new System.TimeSpan(1, 0, 0, 0);
             });
             services.AddMvc();
         }

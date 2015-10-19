@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Beerfish
 {
@@ -24,11 +25,16 @@ namespace Beerfish
         /// Watch for changes in the asset directories and recompile as needed
         /// </summary>
         public bool WatchFiles { get; set; }
-       
+
         /// <summary>
         /// Minify files when compiling
         /// </summary>
         public bool Minify { get; set; }
+
+        /// <summary>
+        /// Time to cache assets. This will be used to set HTTP Expires headers.
+        /// </summary>
+        public TimeSpan CacheLength {get;set;}
     }
     
 }
