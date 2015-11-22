@@ -7,7 +7,7 @@ namespace Beerfish
     {
         Asset GetAsset(string name);
         Asset GetAsset(PathString path);
-        void RegisterAsset(string name, string contents, AssetTypes type);
+        void RegisterAsset(string name, string contents);
         void Clear();
     }
 }

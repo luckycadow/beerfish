@@ -16,14 +16,14 @@ namespace Beerfish.Extensions
     public static class AssetMiddlewareExtensions
     {
 
-        private static CompilationHandler _handler;
+        private static ProcessorHandler _handler;
 
         public static IApplicationBuilder UseAssetHandler(this IApplicationBuilder app)
         {
             var env = app.ApplicationServices.GetRequiredService<IApplicationEnvironment>();
             var options = app.ApplicationServices.GetRequiredService<IOptions<AssetOptions>>().Options;
             var registry = app.ApplicationServices.GetRequiredService<IAssetRegistry>();
-            var compilers = app.ApplicationServices.GetRequiredServices<IAssetCompiler>();
+            var compilers = app.ApplicationServices.GetRequiredServices<IAssetProcessor>();
 
             AssetRazorExtensions.SetupExtensions(registry, options.ServePath);
             
@@ -32,7 +32,7 @@ namespace Beerfish.Extensions
 
             if (_handler == null)
             {
-                _handler = new CompilationHandler(compilers, registry);
+                _handler = new ProcessorHandler(compilers, registry);
             }
 
             _handler.ExecuteCompilers(directories);
@@ -59,11 +59,11 @@ namespace Beerfish.Extensions
             services
                 .Configure(setupAction)
                 .AddSingleton(typeof(IAssetRegistry), typeof(AssetRegistry))
-                .AddTransient(typeof(IAssetCompiler), typeof(SimpleJavascriptCompiler));
+                .AddTransient(typeof(IAssetProcessor), typeof(SimpleJavascriptProcessor));
 
             // Scss compilation will not work on mono because it's using the c++ library
             if (Type.GetType("Mono.Runtime") == null)
-                services.AddTransient(typeof(IAssetCompiler), typeof(ScssCompiler));
+                services.AddTransient(typeof(IAssetProcessor), typeof(ScssProcessor));
 
             return services;
         }

@@ -3,21 +3,18 @@ using System.Linq;
 using System.IO;
 using LibSassNet;
 using Microsoft.Framework.OptionsModel;
+using System.Text.RegularExpressions;
 
 namespace Beerfish.Compilation
 {
-    internal class ScssCompiler : IAssetCompiler
+    internal class ScssProcessor : IAssetProcessor
     {
-        private readonly ISassCompiler _compiler = new LibSassNet.SassCompiler();
+        private readonly ISassCompiler _compiler = new SassCompiler();
         private readonly AssetOptions _options;
 
-        public ScssCompiler(IOptions<AssetOptions> options)
+        public ScssProcessor(IOptions<AssetOptions> options)
         {
             _options = options.Options;
-        }
-
-        public AssetTypes Type {
-            get { return AssetTypes.Css; }
         }
 
         private IEnumerable<FileInfo> FilterFiles(DirectoryInfo directory)
@@ -26,7 +23,7 @@ namespace Beerfish.Compilation
                 .Where(f => !f.Name.StartsWith("_"));
         }
 
-        public Dictionary<string, string> CompileAssets(IEnumerable<DirectoryInfo> directories)
+        public Dictionary<string, string> ProcessAssets(IEnumerable<DirectoryInfo> directories)
         {
             var outputStyle = _options.Minify ? OutputStyle.Compressed : OutputStyle.Expanded;
 
@@ -37,9 +34,9 @@ namespace Beerfish.Compilation
                 var files = FilterFiles(directory);
                 foreach(var file in files)
                 {
-                    var result = _compiler.CompileFile(file.FullName, 
-                        outputStyle: outputStyle, includeSourceComments: false);
-                    assets.Add(file.Name, result.CSS);
+                    var result = _compiler.CompileFile(file.FullName, outputStyle: outputStyle, includeSourceComments: false);
+                    var name = Regex.Replace(file.Name, $"{file.Extension}$", ".css");
+                    assets.Add(name, result.CSS);
                 }
             }
             return assets;

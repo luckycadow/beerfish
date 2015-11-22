@@ -2,9 +2,11 @@
 using Microsoft.Framework.OptionsModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Beerfish
 {
@@ -30,26 +32,21 @@ namespace Beerfish
             return sb.ToString();
         }
 
-        public void RegisterAsset(string name, string contents, AssetTypes type)
+        public void RegisterAsset(string name, string contents)
         {
-            var extension = name.Split('.').ToList().Last();
-            var baseName = name.Replace($".{extension}", string.Empty);
+            var extension = Path.GetExtension(name);
+            var baseName = Regex.Replace(name, $"{extension}$", string.Empty);
             
             if (_options.Fingerprint)
             {
                 var hash = GetHashString(contents);
-                name = $"{baseName}-{hash}.{type.ToString()}".ToLower();
-            }
-            else
-            {
-                name = $"{baseName}.{type.ToString()}".ToLower();
+                name = $"{baseName}-{hash}{extension}".ToLower();
             }
             
             var asset = new Asset
             {
-                Type = type,
-                SimpleName = $"{baseName}.{type.ToString()}".ToLower(),
-                Path = $"{_options.ServePath}/{name}",
+                SimpleName = $"{baseName}{extension}".ToLower(),
+                Path = $"{_options.ServePath}/{name.ToLower()}",
                 Contents = contents
             };
 

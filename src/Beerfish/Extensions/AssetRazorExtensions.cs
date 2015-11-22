@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc.Rendering;
+using System.IO;
 
 namespace Beerfish.Extensions
 {
@@ -14,47 +15,62 @@ namespace Beerfish.Extensions
             _assetRegistry = registry;
             _servePath = servePath.TrimEnd("/".ToCharArray());
         }
-
+        
         /// <summary>
-        /// Returns a script or link tag as appropriate referencing the asset specified by name.
-        /// If the asset does not exist no tag will be written.
+        /// Returns the contents of the asset specified as a string.
         /// </summary>
-        /// <param name="helper">HtmlHelper</param>
-        /// <param name="name">Asset name</param>
+        /// <param name="helper"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public static HtmlString Asset(this IHtmlHelper helper, string name)
+        public static string Asset(this IHtmlHelper helper, string name)
         {
             if (_assetRegistry == null)
-            {
                 throw new InvalidOperationException("Asset helpers cannot be used before an AssetRegistry has been set.");
-            }
+
+            var asset = _assetRegistry.GetAsset(name);
+            
+            return asset?.Contents;
+        }
+
+        /// <summary>
+        /// Return the path of the asset specified.
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string AssetPath(this IHtmlHelper helper, string name)
+        {
+            if (_assetRegistry == null)
+                throw new InvalidOperationException("Asset helpers cannot be used before an AssetRegistry has been set.");
 
             var asset = _assetRegistry.GetAsset(name);
 
             if (asset == null)
-            {
-                // If we're asked to write a tag for an asset that doesn't exist, just use the name
-                // prefixed by the serve path so the request has the option to fall through to a
-                // file handler.
-                if (name.EndsWith(".css"))
-                {
-                    return new HtmlString($"<link rel=\"stylesheet\" href=\"{_servePath}/{name}\">");
-                }
-                else
-                {
-                    return new HtmlString($"<script src=\"{_servePath}/{name}\"></script>");
-                }
-            }
-            else if (asset.Type == AssetTypes.Js)
-            {
-                return new HtmlString($"<script src=\"{asset.Path}\"></script>");
-            }
-            else if (asset.Type == AssetTypes.Css)
-            {
-                return new HtmlString($"<link rel=\"stylesheet\" href=\"{asset.Path}\">");
-            }
+                return $"{_servePath}/{name}";
 
-            return new HtmlString(string.Empty);
+            return asset.Path;
+        }
+
+        /// <summary>
+        /// Render a link tag to include the asset specified as a stylesheet.
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static HtmlString Css(this IHtmlHelper helper, string name)
+        {
+            return new HtmlString($"<link rel=\"stylesheet\" href=\"{helper.AssetPath(name)}\">");
+        }
+
+        /// <summary>
+        /// Render a script tag to include the asset specified as javascript.
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static HtmlString Js(this IHtmlHelper helper, string name)
+        {
+            return new HtmlString($"<script src=\"{helper.AssetPath(name)}\"></script>");
         }
     }
 }

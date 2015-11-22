@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Beerfish.Compilation
 {
-    internal class CompilationHandler
+    internal class ProcessorHandler
     {
-        private readonly IEnumerable<IAssetCompiler> _compilers;
+        private readonly IEnumerable<IAssetProcessor> _compilers;
         private readonly IAssetRegistry _registry;
         private IEnumerable<DirectoryInfo> _watchedDirectories;
 
-        public CompilationHandler(IEnumerable<IAssetCompiler> compilers, IAssetRegistry registry)
+        public ProcessorHandler(IEnumerable<IAssetProcessor> compilers, IAssetRegistry registry)
         {
             _compilers = compilers;
             _registry = registry;
@@ -26,10 +26,10 @@ namespace Beerfish.Compilation
             Parallel.ForEach(_compilers, c => {
                 try
                 {
-                    var assetContents = c.CompileAssets(directories);
+                    var assetContents = c.ProcessAssets(directories);
                     foreach (var asset in assetContents)
                     {
-                        _registry.RegisterAsset(asset.Key, asset.Value, c.Type);
+                        _registry.RegisterAsset(asset.Key, asset.Value);
                     }
                 }
                 catch (IOException e)
@@ -46,8 +46,10 @@ namespace Beerfish.Compilation
             {
                 var watcher = new FileSystemWatcher(dir.FullName);
                 watcher.IncludeSubdirectories = true;
-                watcher.NotifyFilter = NotifyFilters.LastWrite;
+                watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
                 watcher.Changed += new FileSystemEventHandler(OnChange);
+                watcher.Created += new FileSystemEventHandler(OnChange);
+                watcher.Deleted += new FileSystemEventHandler(OnChange);
                 watcher.EnableRaisingEvents = true;
             }
         }

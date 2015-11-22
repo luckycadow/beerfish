@@ -1,28 +1,23 @@
-﻿using DouglasCrockford.JsMin;
-using Microsoft.Framework.OptionsModel;
+﻿using Microsoft.Framework.OptionsModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Yahoo.Yui.Compressor;
 
 namespace Beerfish.Compilation
 {
-    public class SimpleJavascriptCompiler : IAssetCompiler
+    public class SimpleJavascriptProcessor : IAssetProcessor
     {
-        private JsMinifier _minifier = new JsMinifier();
+        private IJavaScriptCompressor _yuiCompressor = new JavaScriptCompressor();
         private AssetOptions _options;
 
-        public SimpleJavascriptCompiler(IOptions<AssetOptions> options)
+        public SimpleJavascriptProcessor(IOptions<AssetOptions> options)
         {
             _options = options.Options;
         }
 
-        public AssetTypes Type
-        {
-            get { return AssetTypes.Js; }
-        }
-
-        public Dictionary<string, string> CompileAssets(IEnumerable<DirectoryInfo> directories)
+        public Dictionary<string, string> ProcessAssets(IEnumerable<DirectoryInfo> directories)
         {
             var assets = new Dictionary<string, string>();
             foreach (var directory in directories)
@@ -36,11 +31,9 @@ namespace Beerfish.Compilation
                 var contents = string.Join(Environment.NewLine, sources);
 
                 if (_options.Minify)
-                {
-                    contents = _minifier.Minify(contents);
-                }
+                    contents = _yuiCompressor.Compress(contents);
 
-                assets.Add(directory.Name, contents);
+                assets.Add($"{directory.Name}.js", contents);
             }
             return assets;
         }

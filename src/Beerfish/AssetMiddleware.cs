@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Framework.Runtime;
 using System;
+using Microsoft.AspNet.StaticFiles;
 
 namespace Beerfish
 {
@@ -16,6 +17,8 @@ namespace Beerfish
         private readonly AssetOptions _options;
         private readonly PathString _assetPath;
         private readonly string _baseDirectory;
+
+        private readonly FileExtensionContentTypeProvider _contentTypeProvider = new FileExtensionContentTypeProvider();
 
         public AssetMiddleware(RequestDelegate next, IOptions<AssetOptions> options, IAssetRegistry registry, IApplicationEnvironment env)
         {
@@ -34,7 +37,7 @@ namespace Beerfish
                 if (asset != null)
                 {
                     SetCacheHeaders(context.Response);
-                    context.Response.ContentType = asset.ContentType;
+                    context.Response.ContentType = GetContentType(asset.Path);
                     context.Response.ContentLength = Encoding.ASCII.GetByteCount(asset.Contents);
                     await context.Response.WriteAsync(asset.Contents);
                     return;
@@ -43,11 +46,8 @@ namespace Beerfish
                 var physicalPath = Path.Combine(_baseDirectory, context.Request.Path.ToString().TrimStart("/".ToCharArray()));
                 if (File.Exists(physicalPath))
                 {
-                    var contents = File.ReadAllText(physicalPath);
                     SetCacheHeaders(context.Response);
-                    context.Response.ContentType = physicalPath.EndsWith(".css") ? "text/css" : "application/javascript";
-                    context.Response.ContentLength = Encoding.ASCII.GetByteCount(contents);
-                    await context.Response.WriteAsync(contents);
+                    await context.Response.SendFileAsync(physicalPath);
                     return;
                 }
             }
@@ -63,6 +63,13 @@ namespace Beerfish
                 response.Headers.SetCommaSeparatedValues("Cache-Control", "public", $"max-age={_options.CacheLength.TotalSeconds}");
                 response.Headers.Set("Expires", expires.ToUniversalTime().ToString("R"));
             }
+        }
+
+        private string GetContentType(string path)
+        {
+            string contentType = "application/octet-stream";
+            _contentTypeProvider.TryGetContentType(path, out contentType);
+            return contentType;
         }
 
     }
