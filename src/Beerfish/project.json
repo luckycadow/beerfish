@@ -1,8 +1,8 @@
 {
-    "version": "1.0.5-beta4",
+    "version": "1.0.6-beta4",
     "description": "ASP.NET 5 asset management middleware",
     "authors": [ "Eric Cadow" ],
-    "tags": [ "css", "javascript", "asset management", "sass" ],
+    "tags": [ "css", "javascript", "asset management", "sass", "bundle" ],
     "projectUrl": "https://github.com/luckycadow/beerfish",
     "licenseUrl": "",
 
